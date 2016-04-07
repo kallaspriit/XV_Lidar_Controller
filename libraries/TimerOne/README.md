@@ -1,13 +1,13 @@
-#TimerThree Library#
+#TimerOne Library#
 
-Paul Stoffregen's modified TimerThree.  This version provides 2 main benefits:
+Paul Stoffregen's modified TimerOne.  This version provides 2 main benefits:
 
 1: Optimized inline functions - much faster for the most common usage
 2: Support for more boards
 
 http://www.pjrc.com/teensy/td_libs_TimerOne.html
 
-https://github.com/PaulStoffregen/TimerThree
+https://github.com/PaulStoffregen/TimerOne
 
 Original code
 
@@ -15,7 +15,7 @@ http://playground.arduino.cc/Code/Timer1
 
 Open Source License
 
-TimerThree is free software. You can redistribute it and/or modify it under
+TimerOne is free software. You can redistribute it and/or modify it under
 the terms of Creative Commons Attribution 3.0 United States License.
 To view a copy of this license, visit
 

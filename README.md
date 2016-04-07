@@ -1,6 +1,8 @@
 XV Lidar Controller
 ===================
 
+**This fork works with Teensy 3.1 and Teensy 3.2.**
+
 Control the Neato XV Lidar with an Arduino compatible board
 
 Used as an interface board to connect directly to the Neato XV Lidar and control the rotation speed through Pulse Width Modulation (PWM).

@@ -13,7 +13,7 @@
   The F() macro in the Serial statements tells the compiler to keep your strings in PROGMEM
 */
 
-#include "libraries/TimerThree/TimerThree.h" // used for ultrasonic PWM motor control
+#include "libraries/TimerOne/TimerOne.h" // used for ultrasonic PWM motor control
 #include "libraries/PID/PID.h"
 #include <EEPROM.h>
 #include "libraries/EEPROMAnything/EEPROMAnything.h"
@@ -48,7 +48,7 @@ struct EEPROM_Config {
 }
 xv_config;
 
-const byte EEPROM_ID = 0x06;  // used to validate EEPROM initialized
+const byte EEPROM_ID = 0x07;  // used to validate EEPROM initialized
 
 double pwm_val = 500;  // start with ~50% power
 double pwm_last;
@@ -138,12 +138,14 @@ const int ledPin = 13;
 
 // initialization (before 'loop')
 void setup() {
+  Serial.begin(115200);
+  
   EEPROM_readAnything(0, xv_config);
   if ( xv_config.id != EEPROM_ID) { // verify EEPROM values have been initialized
     initEEPROM();
   }
   pinMode(xv_config.motor_pwm_pin, OUTPUT);
-  Serial.begin(115200);                            // USB serial
+                              // USB serial
 #if defined(__AVR_ATmega32U4__)
   Serial1.begin(115200);                           // XV LDS data
 
@@ -151,7 +153,7 @@ void setup() {
   Serial1.begin(115200);  // XV LDS data
 #endif
 
-  Timer3.initialize(30);                           // set PWM frequency to 32.768kHz
+  Timer1.initialize(30);                           // set PWM frequency to 32.768kHz
 
   rpmPID.SetOutputLimits(xv_config.pwm_min, xv_config.pwm_max);
   rpmPID.SetSampleTime(xv_config.sample_time);
@@ -244,7 +246,7 @@ void loop() {
   if (xv_config.motor_enable) {
     rpmPID.Compute();
     if (pwm_val != pwm_last) {
-      Timer3.pwm(xv_config.motor_pwm_pin, pwm_val);  // replacement for analogWrite()
+      Timer1.pwm(xv_config.motor_pwm_pin, pwm_val);  // replacement for analogWrite()
       pwm_last = pwm_val;
     }
     motorCheck();
@@ -403,7 +405,7 @@ byte eValidatePacket() {
    initEEPROM
 */
 void initEEPROM() {
-  xv_config.id = 0x06;
+  xv_config.id = EEPROM_ID;
   strcpy(xv_config.version, "1.3.0");
 
 #if defined(__AVR_ATmega32U4__) && defined(CORE_TEENSY)  // if Teensy 2.0
@@ -413,7 +415,7 @@ void initEEPROM() {
   xv_config.motor_pwm_pin = 5;  // pin connected N-Channel Mosfet
 
 #elif defined(__MK20DX256__)  // if Teensy 3.1
-  xv_config.motor_pwm_pin = 33;  // pin connected N-Channel Mosfet
+  xv_config.motor_pwm_pin = 3;  // pin connected N-Channel Mosfet
 #endif
 
   xv_config.rpm_setpoint = 200;  // desired RPM
@@ -678,14 +680,14 @@ void setAngle() {
 
 void motorOff() {
   xv_config.motor_enable = false;
-  Timer3.pwm(xv_config.motor_pwm_pin, 0);
+  Timer1.pwm(xv_config.motor_pwm_pin, 0);
   Serial.println(F(" "));
   Serial.println(F("Motor off"));
 }
 
 void motorOn() {
   xv_config.motor_enable = true;
-  Timer3.pwm(xv_config.motor_pwm_pin, pwm_val);
+  Timer1.pwm(xv_config.motor_pwm_pin, pwm_val);
   rpm_err = 0;  // reset rpm error
   Serial.println(F(" "));
   Serial.println(F("Motor on"));

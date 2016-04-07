@@ -1,4 +1,4 @@
-#include <TimerThree.h>
+#include <TimerOne.h>
 
 // This example creates a PWM signal with 25 kHz carrier.
 //
@@ -16,11 +16,11 @@
 // board's ground must be connected to the fan's ground, and the fan
 // needs +12 volt power from the computer or a separate power supply.
 
-const int fanPin = 14;
+const int fanPin = 4;
 
 void setup(void)
 {
-  Timer3.initialize(40);  // 40 us = 25 kHz
+  Timer1.initialize(40);  // 40 us = 25 kHz
   Serial.begin(9600);
 }
 
@@ -31,7 +31,7 @@ void loop(void)
   for (float dutyCycle = 30.0; dutyCycle < 100.0; dutyCycle++) {
     Serial.print("PWM Fan, Duty Cycle = ");
     Serial.println(dutyCycle);
-    Timer3.pwm(fanPin, (dutyCycle / 100) * 1023);
+    Timer1.pwm(fanPin, (dutyCycle / 100) * 1023);
     delay(500);
   }
 }
